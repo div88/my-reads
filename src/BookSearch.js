@@ -7,7 +7,8 @@ import * as BooksAPI from './BooksAPI.js'
 class BookSearch extends Component {
     state = {
         query: '',
-        books: []
+        books: [],
+        isError: false
     }
 
     updateQuery = (query) => {
@@ -17,29 +18,50 @@ class BookSearch extends Component {
 
         BooksAPI.search(query, 20).then((books) => {
             console.log(books);
-            this.setState({ books: books })
+            if(typeof books !== 'undefined' && books.error !== 'undefined'){
+                if(books.error === "empty query"){
+                    this.setState({
+                        books: [],
+                        isError: true
+                    });
+                } else if (typeof books !== "undefined"){
+                    this.setState({ books: books })
+                } 
+            }else{
+                this.setState({
+                    books: [],
+                    isError: false
+                }) 
+             }
+            
+            
         })
     }
 
     render() {
         return(
             <div className="search-books">
-            <div className="search-books-bar">
-                <Link className="close-search" to="/">Close</Link>
-                <div className="search-books-input-wrapper">
-                    <input type="text" placeholder="Search by title or author" value={this.state.query} onChange={(event) => this.updateQuery(event.target.value)}/>
+                <div className="search-books-bar">
+                    <Link className="close-search" to="/">Close</Link>
+                    <div className="search-books-input-wrapper">
+                        <input type="text" placeholder="Search by title or author" value={this.state.query} onChange={(event) => this.updateQuery(event.target.value)}/>
+                    </div>
                 </div>
-            </div>
-            <div className="search-books-results">
+                <div className="search-books-results">
                 
-                <ol className='books-grid'>
-                    {this.state.books.map((book) => (
-                        <li key={book.id}>
-                        <Book book={book}></Book>
-                        </li>
-                    ))}
-                </ol>
-            </div>
+                    <ol className='books-grid'>
+                        {this.state.books.map((book) => (
+                            <li key={book.id}>
+                                <Book book={book}></Book>
+                            </li>
+                        ))}
+                    </ol>
+                
+
+                    {this.state.isError && (
+                        <p className="error-label">No results available for this search. Try a different search term.</p>
+                    )}
+                </div>
             </div>
         )
     }
