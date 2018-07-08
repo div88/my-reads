@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Book extends Component {
   render() {
     var book = this.props.book
-    console.log(book);
+   
 
     return(
       <div>

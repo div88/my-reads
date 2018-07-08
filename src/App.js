@@ -17,7 +17,7 @@ class BooksApp extends React.Component {
     rvalue: 'read'
   }
 
-  updateQuery = (book, shelf) => {
+  updateShelf = (book, shelf) => {
     let toShelf, fromShelf
     fromShelf = book.shelf
     toShelf = shelf
@@ -52,9 +52,9 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  <Shelf shelfTitle="Currently Reading" books={this.state.currentlyReading} updateShelf={this.updateQuery}></Shelf>
-                  <Shelf shelfTitle="Want to read" books={this.state.wantToRead} updateShelf={this.updateQuery}></Shelf>
-                  <Shelf shelfTitle="Read" books={this.state.read} updateShelf={this.updateQuery}></Shelf>   
+                  <Shelf shelfTitle="Currently Reading" books={this.state.currentlyReading} updateShelf={this.updateShelf}></Shelf>
+                  <Shelf shelfTitle="Want to read" books={this.state.wantToRead} updateShelf={this.updateShelf}></Shelf>
+                  <Shelf shelfTitle="Read" books={this.state.read} updateShelf={this.updateShelf}></Shelf>   
                 </div>
               </div>
               <div path="/search" className="open-search">
@@ -63,7 +63,7 @@ class BooksApp extends React.Component {
             </div>
           )}/>
           <Route path="/search" render={() => (
-            <BookSearch></BookSearch>
+            <BookSearch books={this.state.books} updateShelf={this.updateShelf}></BookSearch>
           )}/>
       </div>
     )

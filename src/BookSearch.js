@@ -11,13 +11,18 @@ class BookSearch extends Component {
         isError: false
     }
 
+    
+
     updateQuery = (query) => {
         this.setState({
             query: query
         })
 
+        const shelfBooks = this.props.books;
+        shelfBooks.map(x => console.log(x));
+        
         BooksAPI.search(query, 20).then((books) => {
-            console.log(books);
+    
             if(typeof books !== 'undefined' && books.error !== 'undefined'){
                 if(books.error === "empty query"){
                     this.setState({
@@ -25,7 +30,18 @@ class BookSearch extends Component {
                         isError: true
                     });
                 } else if (typeof books !== "undefined"){
-                    this.setState({ books: books })
+                    books.forEach(function(book){
+                        var thisBook = shelfBooks.filter(a => a.id === book.id);
+                        if(thisBook.length > 0){
+                            book.shelf = thisBook[0].shelf;
+                        } else {
+                            book.shelf = "none";
+                        }
+                    })
+                    this.setState({ 
+                        books: books,
+                        isError: false
+                    })
                 } 
             }else{
                 this.setState({
@@ -37,6 +53,27 @@ class BookSearch extends Component {
             
         })
     }
+
+    updateSearchShelf = (book, shelf) => {
+        const shelfBooks = this.props.shelfBooks.filter((a) => a.id !== book.id).concat(book);
+        const books = this.state.books;
+
+        books.forEach(function(book){
+            var thisBook = shelfBooks.filter(a => a.id === book.id);
+            if(thisBook.length > 0){
+                book.shelf = thisBook[0].shelf;
+            } else {
+                book.shelf = "none";
+            }
+        })
+
+        this.setState({ 
+            books: books
+        })
+
+        this.props.updateShelf(book,shelf);
+        
+      }
 
     render() {
         return(
@@ -52,7 +89,19 @@ class BookSearch extends Component {
                     <ol className='books-grid'>
                         {this.state.books.map((book) => (
                             <li key={book.id}>
-                                <Book book={book}></Book>
+                                {/* <Book book={book}></Book> */}
+                                <Book book={book} updateShelf={this.props.updateShelf}></Book>
+                                {/* <div className="book-shelf-changer">
+                                    <select value={book.shelf} onChange={(event) => {
+                                        this.props.updateSearchShelf(book, event.target.value);
+                                        }}>
+                                        <option value="none" disabled>Move to...</option>
+                                        <option value="currentlyReading">Currently Reading</option>
+                                        <option value="wantToRead">Want to Read</option>
+                                        <option value="read">Read</option>
+                                        <option value="none">None</option>
+                                    </select>
+                                </div> */}
                             </li>
                         ))}
                     </ol>
