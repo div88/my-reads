@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Link } from 'react-router-dom';
 import Shelf from './Shelf.js'
 import BookSearch from './BookSearch.js'
