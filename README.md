@@ -1,4 +1,4 @@
-#MyReads
+# MyReads
 
 In the MyReads project, a bookshelf app is created whihc allows user to select and categorize books users have read, are currently reading, or want to read. 
 
