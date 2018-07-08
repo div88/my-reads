@@ -10,15 +10,13 @@ class BookSearch extends Component {
         isError: false
     }
 
-    
-
     updateQuery = (query) => {
         this.setState({
             query: query
         })
 
+        //Shelved books from main page
         const shelfBooks = this.props.books;
-        shelfBooks.map(x => console.log(x));
         
         BooksAPI.search(query, 20).then((books) => {
     
@@ -88,19 +86,7 @@ class BookSearch extends Component {
                     <ol className='books-grid'>
                         {this.state.books.map((book) => (
                             <li key={book.id}>
-                                {/* <Book book={book}></Book> */}
                                 <Book book={book} updateShelf={this.props.updateShelf}></Book>
-                                {/* <div className="book-shelf-changer">
-                                    <select value={book.shelf} onChange={(event) => {
-                                        this.props.updateSearchShelf(book, event.target.value);
-                                        }}>
-                                        <option value="none" disabled>Move to...</option>
-                                        <option value="currentlyReading">Currently Reading</option>
-                                        <option value="wantToRead">Want to Read</option>
-                                        <option value="read">Read</option>
-                                        <option value="none">None</option>
-                                    </select>
-                                </div> */}
                             </li>
                         ))}
                     </ol>
